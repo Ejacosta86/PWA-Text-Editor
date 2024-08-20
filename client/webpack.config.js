@@ -23,12 +23,52 @@ module.exports = () => {
       new HtmlWebpackPlugin({
         template: './index.html',
         title: 'Webpack Plugin',
-      })
+      }),
+      new MiniCssExtractPlugin(),
+
+      new InjectManifest({ swSrc: './src-sw.js', swDest: 'service-worker.js' }),
+
+      new WebpackPwaManifest({
+        name: 'Text Editor PWS',
+        short_name: 'TextEditorPWA',
+        description: 'An awesome PWA Text Editor!',
+        background_color: '#ffffff',
+        publicPath: './',
+        fingerprints: false,
+        icons: [
+          {
+            src: path.resolve('src/images/logo.png'),
+            size: ['96', '144'],
+            destination: path.join('logo'),
+          },
+          {
+            src: path.resolve('favicon.ico'),
+            size: '48x48'
+          },
+        ],
+      }),
     ],
 
     module: {
       rules: [
-        
+        {
+          test: /\.css$/,
+          use: ['style-loader', 'css-loader'],
+        },
+        {
+          test: /\.(png|svg|jpg|jpeg|gif|ico)$/i,
+          type: 'asset/resource',
+        },
+        {
+          test: /\.m?js$/,
+          exclude: /(node_modules|bower_components)/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+             presets: ['@babel/preset-env'],
+          },
+         },  
+        },
       ],
     },
   };
