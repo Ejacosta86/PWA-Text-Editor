@@ -29,11 +29,11 @@ export const getDb = async () => {
   const todosDb = await openDB('jate', 1);
   const tx = todosDb.transaction('jate', 'readonly');
   const store = tx.objectStore('jate');
-  const request = store.get('1');
+  const request = store.get(1);
   const result = await request;
-  const text = result ? result[result.length - 1].content : null;
-  console.log('All text', text);
-  return text;
+  // const text = result ? result[result.length - 1].content : null;
+  // console.log('All text', text);
+  return result?.value;
 };
 
 
